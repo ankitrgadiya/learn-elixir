@@ -3,17 +3,19 @@ defmodule Hangman.Game do
     turns_left: 7,
     game_state: :initializing,
     letters: [],
-    used: MapSet.new()
+    used: MapSet.new(),
+    dictionary: nil
   )
 
   def new_game() do
-    Dictionary.random_word()
+    Dictionary.start()
     |> new_game()
   end
 
-  def new_game(word) do
+  def new_game(dictionary) do
     %Hangman.Game{
-      letters: String.codepoints(word)
+      dictionary: dictionary,
+      letters: dictionary |> Dictionary.random_word() |> String.codepoints()
     }
   end
 

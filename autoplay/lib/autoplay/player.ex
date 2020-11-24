@@ -19,7 +19,8 @@ defmodule Autoplay.Player do
     %State{
       game_service: game,
       tally: Hangman.tally(game),
-      type: type
+      type: type,
+      dictionary: Dictionary.start()
     }
   end
 

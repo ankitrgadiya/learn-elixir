@@ -6,16 +6,16 @@ defmodule Autoplay.Guesser do
     |> to_string()
   end
 
-  def guess(%State{type: :smart, tally: tally}) do
-    possible_word(tally.letters)
+  def guess(state = %State{type: :smart}) do
+    possible_word(state)
     |> String.codepoints()
     |> Enum.random()
   end
 
-  defp possible_word(letters) do
+  defp possible_word(%State{dictionary: dictionary, tally: %{letters: letters}}) do
     letters
     |> Enum.count()
-    |> Dictionary.word_list()
+    |> Dictionary.word_list(dictionary)
     |> filter_words(letters)
     |> Enum.random()
   end
