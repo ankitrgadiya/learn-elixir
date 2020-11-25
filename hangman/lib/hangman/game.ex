@@ -8,14 +8,8 @@ defmodule Hangman.Game do
   )
 
   def new_game() do
-    Dictionary.start()
-    |> new_game()
-  end
-
-  def new_game(dictionary) do
     %Hangman.Game{
-      dictionary: dictionary,
-      letters: dictionary |> Dictionary.random_word() |> String.codepoints()
+      letters: Dictionary.random_word() |> String.codepoints()
     }
   end
 

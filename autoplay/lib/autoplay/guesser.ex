@@ -12,10 +12,10 @@ defmodule Autoplay.Guesser do
     |> Enum.random()
   end
 
-  defp possible_word(%State{dictionary: dictionary, tally: %{letters: letters}}) do
+  defp possible_word(%State{tally: %{letters: letters}}) do
     letters
     |> Enum.count()
-    |> Dictionary.word_list(dictionary)
+    |> Dictionary.word_list()
     |> filter_words(letters)
     |> Enum.random()
   end
