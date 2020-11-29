@@ -16,27 +16,27 @@ defmodule GameTest do
   test "state isn't changed for :won or :lost game" do
     for state <- [:won, :lost] do
       game = Game.new_game() |> Map.put(:game_state, state)
-      assert ^game = Game.make_move(game, "x")
+      assert {^game, _tally} = Game.make_move(game, "x")
     end
   end
 
   test "first occurence of letter is not already used" do
     game = Game.new_game()
-    game = Game.make_move(game, "x")
+    {game, _tally} = Game.make_move(game, "x")
     assert game.game_state != :already_used
   end
 
   test "second occurence of letter is not already used" do
     game = Game.new_game()
-    game = Game.make_move(game, "x")
+    {game, _tally} = Game.make_move(game, "x")
     assert game.game_state != :already_used
-    game = Game.make_move(game, "x")
+    {game, _tally} = Game.make_move(game, "x")
     assert game.game_state == :already_used
   end
 
   test "a good guess is recognized" do
     game = Game.new_game("wibble")
-    game = Game.make_move(game, "w")
+    {game, _tally} = Game.make_move(game, "w")
     assert game.game_state == :good_guess
     assert game.turns_left == 7
   end
@@ -45,7 +45,7 @@ defmodule GameTest do
     game = Game.new_game("wibble")
 
     fun = fn {guess, state}, game ->
-      game = Game.make_move(game, guess)
+      {game, _tally} = Game.make_move(game, guess)
       assert game.game_state == state
       game
     end
@@ -63,7 +63,7 @@ defmodule GameTest do
 
   test "bad guess is recognized" do
     game = Game.new_game("wibble")
-    game = Game.make_move(game, "x")
+    {game, _tally} = Game.make_move(game, "x")
     assert game.game_state == :bad_guess
     assert game.turns_left == 6
   end
@@ -73,13 +73,13 @@ defmodule GameTest do
 
     fun = fn
       {guess, state = :bad_guess, turns_left}, game ->
-        game = Game.make_move(game, guess)
+        {game, _tally} = Game.make_move(game, guess)
         assert game.game_state == state
         assert game.turns_left == turns_left
         game
 
       {guess, state = :lost}, game ->
-        game = Game.make_move(game, guess)
+        {game, _tally} = Game.make_move(game, guess)
         assert game.game_state == state
         game
     end

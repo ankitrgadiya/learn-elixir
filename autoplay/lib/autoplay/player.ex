@@ -40,8 +40,8 @@ defmodule Autoplay.Player do
 
   defp make_move(game = %{game_service: game_service}) do
     guess = Guesser.guess(game)
-    {game_service, tally} = Hangman.make_move(game_service, guess)
-    %{game | game_service: game_service, tally: tally}
+    tally = Hangman.make_move(game_service, guess)
+    Map.put(game, :tally, tally)
   end
 
   defp exit_with_message(msg) do
