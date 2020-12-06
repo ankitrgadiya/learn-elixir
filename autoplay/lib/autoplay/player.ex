@@ -1,6 +1,9 @@
 defmodule Autoplay.Player do
   alias Autoplay.{State, Guesser, Summary}
 
+  # Since there is no way to identify the server node, its hardcoded here.
+  @hangman_server :hangman@tesla
+
   def dumb_play() do
     start(:dumb)
   end
@@ -10,7 +13,7 @@ defmodule Autoplay.Player do
   end
 
   defp start(type) when type in [:dumb, :smart] do
-    Hangman.new_game()
+    new_game()
     |> setup_game(type)
     |> play()
   end
@@ -21,6 +24,11 @@ defmodule Autoplay.Player do
       tally: Hangman.tally(game),
       type: type
     }
+  end
+
+  defp new_game() do
+    Node.connect(@hangman_server)
+    :rpc.call(@hangman_server, Hangman, :new_game, [])
   end
 
   defp play(%State{tally: %{game_state: :won}}) do
