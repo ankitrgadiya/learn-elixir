@@ -1,7 +1,7 @@
 defmodule Hangman.Application do
   use Application
 
-  alias Hangman.Server
+  alias Hangman.{Server, Metadata}
 
   def start(_type, _args) do
     options = [
@@ -10,6 +10,7 @@ defmodule Hangman.Application do
       start: {Server, :start_link, []}
     ]
 
+    Metadata.start_link()
     DynamicSupervisor.start_link(Hangman.Server, [], options)
   end
 

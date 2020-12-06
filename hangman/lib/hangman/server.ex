@@ -1,12 +1,14 @@
 defmodule Hangman.Server do
   use GenServer
-  alias Hangman.Game
+  alias Hangman.{Game, Metadata}
 
   def start_link() do
     GenServer.start_link(__MODULE__, nil)
   end
 
   def init(_) do
+    count = Metadata.count_inc()
+    IO.puts("\nTotal Games: #{count}\n")
     {:ok, Game.new_game()}
   end
 
